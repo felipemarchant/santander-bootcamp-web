@@ -5,6 +5,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -14,12 +15,12 @@ import java.util.List;
 public class StockController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<StockDTO> save(@RequestBody StockDTO stock) {
+    public ResponseEntity<StockDTO> save(@RequestBody @Valid StockDTO stock) {
         return ResponseEntity.ok(stock);
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<StockDTO> update(@RequestBody StockDTO stock) {
+    public ResponseEntity<StockDTO> update(@RequestBody @Valid StockDTO stock) {
         return ResponseEntity.ok(stock);
     }
 
