@@ -1,0 +1,13 @@
+version: '3.3'
+services:
+  santander-bootcamp-db:
+    container_name: santander-bootcamp-db
+    image: postgres:13.3-alpine
+    volumes:
+      - ./db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: santander-bootcamp-db
+      POSTGRES_USER: santander-bootcamp-db
+      POSTGRES_PASSWORD: santander-bootcamp-db
+    ports:
+      - 5437:5432

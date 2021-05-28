@@ -1,6 +1,8 @@
 package com.project.bootcamp.controller;
 
 import com.project.bootcamp.model.dto.StockDTO;
+import com.project.bootcamp.service.StockService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,43 +12,46 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/stock")
 public class StockController {
 
+    private final StockService service;
+
+    @Autowired
+    public StockController(StockService service) {
+        this.service = service;
+    }
+
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<StockDTO> save(@RequestBody @Valid StockDTO stock) {
-        return ResponseEntity.ok(stock);
+        return ResponseEntity.ok(service.save(stock));
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<StockDTO> update(@RequestBody @Valid StockDTO stock) {
-        return ResponseEntity.ok(stock);
+        return ResponseEntity.ok(service.update(stock));
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<StockDTO>> findAll() {
-        StockDTO stockOne = new StockDTO();
-        stockOne.setId(1L);
-        stockOne.setName("Magazine Luiza");
-        stockOne.setPrice(1000D);
-        stockOne.setDate(LocalDate.now());
-        return ResponseEntity.ok(Arrays.asList(stockOne));
+        return ResponseEntity.ok(service.findAll());
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<StockDTO> findById(@PathVariable Long id) {
-        StockDTO stockOne = new StockDTO();
-        stockOne.setId(1L);
-        stockOne.setName("Magazine Luiza");
-        stockOne.setPrice(1000D);
-        stockOne.setDate(LocalDate.now());
-        StockDTO stockTwo = new StockDTO();
-        stockTwo.setId(2L);
-        stockTwo.setName("Ponto Frio");
-        stockTwo.setPrice(200D);
-        stockTwo.setDate(LocalDate.now());
-        List<StockDTO> dtos = Arrays.asList(stockOne, stockTwo);
-        return ResponseEntity.ok(dtos.stream().filter(s -> s.getId().compareTo(id) == 0).findFirst().get());
+        return ResponseEntity.ok(service.findById(id));
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+        service.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(value = "/today", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<StockDTO>> findToday() {
+        return ResponseEntity.ok(service.findToday());
     }
 }
